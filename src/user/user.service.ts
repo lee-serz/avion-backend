@@ -14,6 +14,7 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async byId(id: number, selectObject: Prisma.UserSelect = {}) {
+    console.log(`Fetching user with ID: ${id}`);
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -32,8 +33,10 @@ export class UserService {
         ...selectObject,
       },
     });
+
     if (!user) {
-      throw new Error('User not found');
+      console.error(`User with ID ${id} not found`);
+      throw new NotFoundException('Пользователь не найден');
     }
     return user;
   }
@@ -62,12 +65,14 @@ export class UserService {
     });
   }
 
-  async toggleFavorite(productId: number, userId: number) {
+  async toggleFavorite(userId: number, productId: number) {
+    console.log(
+      `Attempting to toggle favorite for user ID: ${userId} and product ID: ${productId}`,
+    );
+
     const user = await this.byId(userId);
-
-    if (!user) throw new NotFoundException('Пользователь не найден');
-
     const isExists = user.favorites.some((product) => product.id === productId);
+    
     await this.prisma.user.update({
       where: {
         id: user.id,
@@ -80,6 +85,6 @@ export class UserService {
         },
       },
     });
-    return 'Success';
+    return { message: 'Success' };
   }
 }

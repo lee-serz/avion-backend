@@ -41,7 +41,4 @@ export class UserController {
   ) {
     return this.userService.toggleFavorite(id, +productId);
   }
-  // get profile
-  // toggleFavorites
-  // updateProfile
 }

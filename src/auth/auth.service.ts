@@ -20,6 +20,12 @@ export class AuthService {
 
   async login(dto: AuthDto) {
     const user = await this.validateUser(dto);
+    const tokens = await this.issueTokens(user.id);
+
+    return {
+      user: this.returnUserFields(user),
+      ...tokens,
+    };
   }
 
   async getNewTokens(refreshToken: string) {
@@ -60,6 +66,7 @@ export class AuthService {
       ...tokens,
     };
   }
+
   private async issueTokens(userId: number) {
     const data = { id: userId };
 

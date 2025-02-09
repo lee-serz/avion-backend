@@ -54,6 +54,7 @@ model Category {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   name     String    @unique
+  slug     String    @unique
   products Product[]
 }
 
@@ -97,6 +98,8 @@ model OrderItem {
 
   product   Product @relation(fields: [productId], references: [id])
   productId Int     @map("product_id")
+
+  @@map("Order_item")
 }
 
 enum EnumOrderStatus {
